@@ -18,8 +18,8 @@ type Luno struct {
 	Status    string `json:"status"`
 }
 
-// Tick is the model for the current pair state
-type Tick struct {
+// Coin is the model for the current pair state
+type Coin struct {
 	Pair      string
 	Timestamp uint64
 	Bid       float64
@@ -29,9 +29,9 @@ type Tick struct {
 	IsActive  bool
 }
 
-// GetTick retrieves the current price for the specified pair
-func GetTick(pair string) (Tick, error) {
-	tick := Tick{
+// GetCoin retrieves the current price for the specified pair
+func GetCoin(pair string) (Coin, error) {
+	coin := Coin{
 		Pair: pair,
 	}
 
@@ -39,26 +39,26 @@ func GetTick(pair string) (Tick, error) {
 	url := "https://api.luno.com/api/1/ticker?pair=" + pair
 	resp, err := http.Get(url)
 	if err != nil {
-		return tick, err
+		return coin, err
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return tick, err
+		return coin, err
 	}
 	var luno Luno
 	err = json.Unmarshal(body, &luno)
 	if err != nil {
-		return tick, err
+		return coin, err
 	}
 
-	// Map API response model to Tick
-	tick.IsActive = (luno.Status == "ACTIVE")
-	tick.Timestamp = luno.Timestamp
-	tick.Bid, _ = strconv.ParseFloat(luno.Bid, 64)
-	tick.Ask, _ = strconv.ParseFloat(luno.Ask, 64)
-	tick.LastTrade, _ = strconv.ParseFloat(luno.LastTrade, 64)
-	tick.Volume, _ = strconv.ParseFloat(luno.Volume, 64)
+	// Map API response model to Coin
+	coin.IsActive = (luno.Status == "ACTIVE")
+	coin.Timestamp = luno.Timestamp
+	coin.Bid, _ = strconv.ParseFloat(luno.Bid, 64)
+	coin.Ask, _ = strconv.ParseFloat(luno.Ask, 64)
+	coin.LastTrade, _ = strconv.ParseFloat(luno.LastTrade, 64)
+	coin.Volume, _ = strconv.ParseFloat(luno.Volume, 64)
 
-	return tick, nil
+	return coin, nil
 }

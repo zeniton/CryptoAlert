@@ -5,11 +5,11 @@ import (
 )
 
 func main() {
-	tick, err := GetTick("XBTZAR")
+	btc, err := GetCoin("XBTZAR")
 	if err != nil {
 		fmt.Println(err)
 	}
-	if tick.IsActive {
-		fmt.Printf("%+v\n", tick)
+	if btc.IsActive {
+		fmt.Printf("%+v\n", btc)
 	}
 }
