@@ -5,11 +5,16 @@ import (
 )
 
 func main() {
-	btc, err := GetCoin("XBTZAR")
-	if err != nil {
-		fmt.Println(err)
+	alert := make(chan string)
+
+	bitcoin := Coin{Symbol: "XBTZAR"}
+	ether := Coin{Symbol: "ETHZAR"}
+	coins := []Coin{bitcoin, ether}
+	for _, coin := range coins {
+		go coin.Monitor(alert)
 	}
-	if btc.IsActive {
-		fmt.Printf("%+v\n", btc)
+
+	for {
+		fmt.Println(<-alert)
 	}
 }
