@@ -8,8 +8,7 @@ func main() {
 	alert := make(chan string)
 
 	bitcoin := Coin{Symbol: "XBTZAR"}
-	ether := Coin{Symbol: "ETHZAR"}
-	coins := []Coin{bitcoin, ether}
+	coins := []Coin{bitcoin}
 	for _, coin := range coins {
 		go coin.Monitor(alert)
 	}

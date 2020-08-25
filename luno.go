@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-// Luno is tThe model for the JSON reponse from Luno API
-type Luno struct {
+// LunoTick is tThe model for the JSON reponse from Luno API for a tick
+type LunoTick struct {
 	Pair      string `json:"pair"`
 	Timestamp uint64 `json:"timestamp"`
 	Bid       string `json:"bid"`
@@ -20,7 +20,7 @@ type Luno struct {
 	Status    string `json:"status"`
 }
 
-// Coin is the model for the current pair state
+// Coin is the model for the current pair tick
 type Coin struct {
 	Symbol    string
 	Timestamp uint64
@@ -29,6 +29,24 @@ type Coin struct {
 	LastTrade float64
 	Volume    float64
 	IsActive  bool
+}
+
+// LunoTrade is tThe model for the JSON reponse from Luno API for trades
+type LunoTrade struct {
+	Sequence  uint   `json:"sequence"`
+	Timestamp string `json:"timestamp"`
+	Price     string `json:"price"`
+	Volume    string `json:"volume"`
+	IsBuy     bool   `json:"is_buy"`
+}
+
+// Trade is the model for a trade
+type Trade struct {
+	Sequence  uint
+	Timestamp uint
+	Price     float64
+	Volume    float64
+	IsBuy     bool
 }
 
 // Monitor detects and alerts significant changes in a coin
@@ -58,7 +76,7 @@ func (coin *Coin) getTick() error {
 	if err != nil {
 		return err
 	}
-	var luno Luno
+	var luno LunoTick
 	err = json.Unmarshal(body, &luno)
 	if err != nil {
 		return err
